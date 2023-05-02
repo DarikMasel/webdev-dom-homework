@@ -64,8 +64,123 @@
   </body>
 
   <script>
-    "use strict";
-    // Код писать здесь
-    console.log("It works!");
+    const commentList = document.querySelector('.comments');
+  const addForm = document.querySelector('.add-form');
+  const userName = document.querySelector('.add-form-name');
+  const textComment = document.querySelector('.add-form-text');
+  const button = document.querySelector('.add-form-button');
+  const comments = document.querySelectorAll('.comment');
+  const commentsListArray = [
+    {
+      name: "Глеб Фокин",
+      date: "12.02.22 12:18",
+      msg: "Это будет первый комментарий на этой странице",
+      like: "3",
+      Iliked: false,
+    },
+    {
+      name: "Варвара Н.",
+      date: "13.02.22 19:22",
+      msg: "Мне нравится как оформлена эта страница! ❤",
+      like: "75",
+      Iliked: false,
+    },
+   
+  ];
+
+  const addLikes = (e) => {
+    const comment = commentsListArray[e.target.dataset.id];
+    comment.like++;
+    comment.Iliked = true;
+  }
+
+  const delLikes = (e) => {
+    const comment = commentsListArray[e.target.dataset.id];
+    comment.like--;
+    comment.Iliked = false;
+  }
+
+  const initLikeClick = () => {
+    const likeClickElements = document.querySelectorAll('.likes');
+    for (const likeClickElement of likeClickElements) {
+      likeClickElement.addEventListener('click', (e) => {
+        (commentsListArray[e.target.dataset.id].Iliked) ? delLikes(e) : addLikes(e);
+        renderComments();
+      });
+    }
+  }
+
+  function renderComments() {
+    const commentHtmlResult = commentsListArray.map((comment, id) => {
+      (comment.Iliked) ? Iliked = '-active-like' : Iliked = '';
+      (comment.date) ? dates = comment.date : dates = `${("0" + date.getDate()).slice(-2)}.${("0" + (date.getMonth() + 1)).slice(-2)}.${date.getFullYear().toString().slice(-2)} ${("0" + date.getHours()).slice(-2)}:${("0" + date.getMinutes()).slice(-2)}`
+      return `<li class="comment" data-id="${id}">
+        <div class="comment-header">
+          <div>${comment.name}</div>         
+          <div>${dates}</div>          
+        </div>
+        <div class="comment-body">
+          <div class="comment-text">
+            ${comment.msg}
+          </div>
+        </div>
+        <div class="comment-footer">
+          <div class="likes">
+            <span class="likes-counter" >${comment.like}</span>
+            <button class="like-button ${Iliked}" data-id="${id}"></button>
+          </div>
+        </div>
+      </li>`;
+    }).join("");
+    commentList.innerHTML = commentHtmlResult;
+    initLikeClick();
+  }
+
+  const valiate = () => {
+    userName.classList.toggle('error', userName.value.length === 0);
+    textComment.classList.toggle('error', textComment.value.length < 1);
+    return (userName.value.length > 0 && textComment.value.length >= 1);
+  }
+
+  const addComment = () => {
+    const validate = valiate();
+    const date = new Date();
+    if (validate) {
+      commentsListArray.push({
+        name: userName.value,
+        date: `${("0" + date.getDate()).slice(-2)}.${("0" + (date.getMonth() + 1)).slice(-2)}.${date.getFullYear().toString().slice(-2)} ${("0" + date.getHours()).slice(-2)}:${("0" + date.getMinutes()).slice(-2)}`,
+        msg: textComment.value,
+        like: 0,
+      });
+      renderComments();
+      textComment.value = "";
+      button.setAttribute('disabled', '');
+    }
+  };
+
+  button.addEventListener('click', (event) => {
+    addComment();
+  });
+
+  button.addEventListener('click', () => {
+   if (userName.value === "") {
+    userName.style.backgroundColor = "red"; 
+  }});
+
+  addForm.addEventListener('input', (event) => {
+    if (validate) {
+      button.removeAttribute('disabled');
+      button.classList.remove('add-form-button-disabled');
+    }
+  });
+
+
+  addForm.addEventListener('keydown', (event) => {
+    if (event.ctrlKey && event.key === "Enter") {
+      event.preventDefault();
+      addComment();
+    }
+  });
+  renderComments();
   </script>
 </html>
