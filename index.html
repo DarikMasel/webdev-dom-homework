@@ -54,6 +54,7 @@ const commentsListArray = [
     }
 ];
 
+
 const addLikes = (e) => {
     commentsListArray[e.target.dataset.id].like = Number(commentsListArray[e.target.dataset.id].like) + 1;
     commentsListArray[e.target.dataset.id].Iliked = true;
