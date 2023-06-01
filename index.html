@@ -29,8 +29,8 @@
         rows="4"
       ></textarea>
       <div class="add-form-row">
-        <button class="del-form-button">Удалить последний комментарий </button>
-        <button class="add-form-button" disabled>Написать</button>
+        <button class="del-form-button hide">Удалить последний комментарий </button>
+        <button class="add-form-button">Написать</button>
       </div>
 
     </div>
@@ -93,21 +93,30 @@ function getComments () {
   return fetch("https://webdev-hw-api.vercel.app/api/v1/darikmasel/comments", {
     method: "GET"
   }).then((response) => {
-    return response.json();
+    if (response.status === 200) {
+      return response.json()
+    } if (response.status === 500) {
+      return Promise.reject(new Error("Сервер упал"))
+    } else {
+      return Promise.reject(new Error("неизвестная ошибка"))
+    }
   }).then((responseData) => {
     usersComments = responseData.comments.map((comment) => {
-      
       return {
         name: comment.author.name,
         date: new Date(comment.date),
         text: comment.text,
         likes: comment.likes,
-        isLiked: comment.isLiked
+        isLiked: comment.isLiked,
       }
-    });
+    })
     loaderComment = false
     renderForm(loaderComment)
     renderComments();
+  }).catch((error) => {
+    alert(error)
+    loaderComment = false
+    renderForm(loadedComment)
   });
 }
 
@@ -115,6 +124,7 @@ function postComments () {
   return fetch("https://webdev-hw-api.vercel.app/api/v1/darikmasel/comments", {
     method: "POST",
     body: JSON.stringify({
+      forceError: false,
       "text": newComment.value.replaceAll("&", "&amp;")
             .replaceAll("<", "&lt;")
             .replaceAll(">", "&gt;")
@@ -126,20 +136,39 @@ function postComments () {
             .replaceAll(">", "&gt;")
             .replaceAll('"', "&quot;"),
     })}).then((response) => {
+      if (response.status === 201) {
         return response.json()
+      } if (response.status === 400 || newComment.value.length < 3 && newName.value.length < 3) {
+        return Promise.reject(new Error("Имя или комментарий слишком короткие"))
+      } if (response.status === 500) {
+        return Promise.reject(new Error("Сервер упал"))
+      } else {
+        console.log(response.status)
+        return Promise.reject(new Error("неизвестная ошибка"))
+      }
     }).then((responseData) => {
       getComments()
+      cleareInputs()
         renderComments();
+    }).catch((error) => {
+      loadedComment = false
+      renderForm(loadedComment)
+      if (error.message === "Сервер упал") {
+        postComments()
+      } if (error.message === 'Failed to fetch') {
+        alert('Нет соединения, попробуйте позже')
+      } else {
+        alert(error.message)
+      }
     });
 }
 
 
 function addNewComment() {
       const dateNow = new Date();
-      let loaderComment = true
-      renderForm(loaderComment)
+      let loadedComment = true
+      renderForm(loadedComment)
       postComments()
-      cleareInputs()
       renderComments()
       commentClickListener()
 }
@@ -167,7 +196,7 @@ function formatDate(date) {
 function cleareInputs () {
     newName.value = ''
     newComment.value = ''
-    addButton.setAttribute('disabled', 'disabled')
+    // addButton.setAttribute('disabled', 'disabled')
 }
 
 const commentClickListener = () => {
@@ -196,23 +225,23 @@ for (const likeButton of likeButtons) {
 }
 }
 
-newName.addEventListener('input', function () {
-  if (newName.value.length < 2 || newComment.value.length < 5) {
-      addButton.setAttribute('disabled', 'disabled')
-  }
-  else{
-      addButton.removeAttribute('disabled')
-  }
-});
+// newName.addEventListener('input', function () {
+//     if (newName.value.length < 2 || newComment.value.length < 5) {
+//         addButton.setAttribute('disabled', 'disabled')
+//     }
+//     else{
+//         addButton.removeAttribute('disabled')
+//     }
+// });
 
-newComment.addEventListener('input', function () {
-  if (newName.value.length < 2 || newComment.value.length < 5) {
-      addButton.setAttribute('disabled', 'disabled')
-  }
-  else{
-      addButton.removeAttribute('disabled')
-  }
-});
+// newComment.addEventListener('input', function () {
+//     if (newName.value.length < 2 || newComment.value.length < 5) {
+//         addButton.setAttribute('disabled', 'disabled')
+//     }
+//     else{
+//         addButton.removeAttribute('disabled')
+//     }
+// });
 
 
 addButton.addEventListener('click', addNewComment)
@@ -269,11 +298,11 @@ const renderComments = () => {
 
 
 
-function renderForm(loaderComment) {
-  if (loaderComment == true){
+function renderForm(loadedComment) {
+  if (loadedComment == true){
     addForm.classList.add('hide')
     loader.classList.remove('hide')
-  } if(loaderComment == false){
+  } if(loadedComment == false){
     loader.classList.add('hide')
     addForm.classList.remove('hide')
   }
