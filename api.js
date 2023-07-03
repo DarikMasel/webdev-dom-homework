@@ -1,5 +1,5 @@
 import { newName, newComment, addButton } from "./comments.js";
-import { commentClickListener } from "./listeners.js";
+import { commentClickListener } from "./main.js";
 import { renderComments, renderLoaderComments, renderForm } from "./renderComments.js";
 
 let loadedComment = true

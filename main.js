@@ -1,8 +1,11 @@
+
 import { form, newName, newComment, addButton, boxOfComments} from "./comments.js";
-import { addNewComment, allComments } from "./api.js";
+import { addNewComment, allComments  } from "./api.js";
 import { AddLikeOrDelLike } from "./addDelLikes.js";
 
- let commentClickListener = () => {
+
+
+let commentClickListener = () => {
   
     let boxOfCommentsTexts = document.querySelectorAll('.comment')
   
@@ -67,3 +70,4 @@ delButton.addEventListener('click', function () {
     comments.removeChild(comments.lastChild)
     allComments.pop()
 })
+    

@@ -1,5 +1,5 @@
 import {  boxOfComments } from "./comments.js";
-import { commentClickListener, initEventListeners } from "./listeners.js";
+import { commentClickListener, initEventListeners } from "./main.js";
 import { allComments} from "./api.js";
 
 let renderComments = () => {
