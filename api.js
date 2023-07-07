@@ -62,7 +62,7 @@ function postComments (newComment) {
       if (response.status === 201) {
         return response.json()
       } if (response.status === 400 ) {
-        return Promise.reject(new Error("Имя или коммент слишком короткие"))
+        return Promise.reject(new Error("Имя или комментарий слишком короткие"))
       } if (response.status === 500) {
         return Promise.reject(new Error("Сервер упал"))
       } else {
@@ -157,7 +157,7 @@ export function autorisationUser (logLogin, logPassword) {
       if (error.message === "Сервер упал") {
         postComments()
       } if (error.message === 'Failed to fetch') {
-        alert('Кажеться у вас сломался интернет, попробуйте позже')
+        alert('Нет соединения, попробуйте позже')
       } else {
         console.log(error.message)
       }

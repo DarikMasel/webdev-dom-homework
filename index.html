@@ -8,38 +8,44 @@
   <link rel="stylesheet" href="styles.css" />
   <title>Проект "Комменты"</title>
 </head>
-<body>
-  
-  <div class="container">
-    <ul class="comments">
 
-    </ul>
-    <div class="add-form hide" >
-      <input
-      minlength="2"
-        type="text"
-        class="add-form-name"
-        placeholder="Введите ваше имя"/>
-      <textarea
-      minlength="5"
-        type="textarea"
-        class="add-form-text"
-        placeholder="Введите ваш коментарий"
-        rows="4"
-      ></textarea>
-      <div class="add-form-row">
-        <button class="del-form-button hide">Удалить последний комментарий </button>
-        <button class="add-form-button" >Написать</button>
+
+  <body>
+    <div class="container">
+      <ul class="comments">
+
+        
+
+      </ul>
+      <div class="forms"></div>
+      <div class="add-form hide" >
+        <input
+        minlength="2"
+          type="text"
+          class="add-form-name"
+          placeholder="Введите ваше имя"
+        />
+        <textarea
+        minlength="5"
+          type="textarea"
+          class="add-form-text"
+          placeholder="Введите ваш коментарий"
+          rows="4"
+        ></textarea>
+        <div class="add-form-row">
+          <button class="del-form-button hide">Удалить последний комментарий </button>
+          <button class="add-form-button" disabled >Написать</button>
+        </div>
+
       </div>
+              <div class="loading-container loader hide">
+          <div class="loading-text">
+            <span class='sp'>Пожалуйста подождите, комментарий загружается.</span>
+          </div>
+        </div>
     </div>
-    <div class="loading-container loader hide">
-      <div class="loading-text">
-        <span class='sp'>Пожалуйста подождите, комментарий загружается.</span>
-      </div>
-    </div>     
-  </div>
+  </body>
 
   <script type="module" src="./api.js"></script>
-
 
 </html>

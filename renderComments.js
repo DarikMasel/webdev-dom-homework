@@ -1,4 +1,4 @@
-import {  boxOfComments } from "./comments.js";
+import {  boxOfComments, form } from "./comments.js";
 import { commentClickListener, initEventListeners, listenerHref, listenersOfForm} from "./listeners.js";
 import { allComments, userData} from "./api.js";
 import { formatDate } from "./utilis.js";
@@ -53,6 +53,7 @@ let renderComments = () => {
 };
 
 const forms = document.querySelector('.forms')
+ console.log()
 
   export function renderInputs () {
     forms.innerHTML = `${ logined ? `<div class="add-form " >
@@ -73,7 +74,7 @@ const forms = document.querySelector('.forms')
     <div class="add-form-row">
       <button class="del-form-button hide"> Удалить последний комментарий </button>
       <button class="add-form-button" >Написать</button>
-    </div>`: `<div class= "autoriz-info">Только <a id= "reg-href" class="reg-href" href = #> авторизованные  </a>  пользователи могут оставлять комменты  </div>`}` 
+    </div>`: `<div class= "autoriz-info">Только <a id= "reg-href" class="reg-href" href = #> авторизованные  </a>  пользователи могут оставлять комментарии  </div>`}` 
     
       if(logined){
         listenersOfForm()
