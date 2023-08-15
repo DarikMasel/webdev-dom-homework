@@ -1,13 +1,14 @@
-import {  boxOfComments, form } from "./comments.js";
 import { commentClickListener, initEventListeners, listenerHref, listenersOfForm} from "./listeners.js";
 import { allComments, userData} from "./api.js";
-import { formatDate } from "./utilis.js";
 
-let token = ""
+import { format } from "date-fns"
+
+let tok = ""
 let logined = ""
+let boxOfComments = document.querySelector('.comments');
 
-export function canLogined(token) {
-  if (!token) {
+export function canLogined(tok) {
+  if (!tok) {
     logined = false
     return logined
   }
@@ -16,7 +17,7 @@ export function canLogined(token) {
     return logined
   }
 }
-canLogined(token)
+canLogined(tok)
 
 let renderComments = () => {
     let commentsHtml = allComments
@@ -26,7 +27,7 @@ let renderComments = () => {
           isLiked = '-active-like';
         }
         
-        let date = formatDate(comment.date)
+        let date = format(new Date(comment.date), 'yyyy-MM-dd hh.mm.ss')
         return `<li class="comment" data-id="${id}">
         <div class="comment-header">
           <div>${comment.name}</div>
@@ -53,7 +54,6 @@ let renderComments = () => {
 };
 
 const forms = document.querySelector('.forms')
- console.log()
 
   export function renderInputs () {
     forms.innerHTML = `${ logined ? `<div class="add-form " >
@@ -68,13 +68,13 @@ const forms = document.querySelector('.forms')
     minlength="5"
       type="textarea"
       class="add-form-text"
-      placeholder=" Введите ваш коментарий"
+      placeholder="Введите ваш коментарий"
       rows="4"
     ></textarea>
     <div class="add-form-row">
-      <button class="del-form-button hide"> Удалить последний комментарий </button>
+      <button class="del-form-button hide">Удалить последний комментарий </button>
       <button class="add-form-button" >Написать</button>
-    </div>`: `<div class= "autoriz-info">Только <a id= "reg-href" class="reg-href" href = #> авторизованные  </a>  пользователи могут оставлять комментарии  </div>`}` 
+    </div>`: `<div class= "autoriz-info">Только <a id= "reg-href" class="reg-href" href = #> авторизованные  </a>  пользователи могут оставлять комменты  </div>`}` 
     
       if(logined){
         listenersOfForm()
@@ -87,6 +87,7 @@ const forms = document.querySelector('.forms')
   
  
 function renderLoaderComments () {
+  let boxOfComments = document.querySelector('.comments');
   boxOfComments.innerHTML = `<li class=" comment comment_loader loading">
 <div class="comment-header comment__header_loader">
 <div class="animated-background  comment__name_loader">
@@ -115,6 +116,7 @@ function renderLoaderComments () {
 <div class="animated-background  like__button_loader"></div>
 </div>
 </li>`
+return boxOfComments
 }
 
 function renderRegForm () {
@@ -123,13 +125,13 @@ function renderRegForm () {
   minlength="2"
     type="text"
     class="reg-form-name"
-    placeholder=" Введите ваше имя"
+    placeholder="Введите ваше имя"
   />
   <input id= 'reg-form-login'
   type="text"
   minlength="2"
   class="reg-form-login"
-  placeholder=" Введите ваш логин"
+  placeholder="Введите ваш логин"
   />
   <input type="password"
   id = 'reg-form-password'
@@ -148,7 +150,7 @@ export function autorizationForm(params) {
   type="text"
   minlength="2"
   class="log-form-login"
-  placeholder=" Введите ваш логин "
+  placeholder="Введите ваш логин"
   />
   <input type="password"
   id = 'log-form-password'

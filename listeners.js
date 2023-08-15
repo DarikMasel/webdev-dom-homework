@@ -1,4 +1,4 @@
-import { form, newName, newComment, addButton} from "./comments.js";
+import { newComment} from "./comments.js";
 import {allComments, autorisationUser, loginUser, userData } from "./api.js";
 import { AddLikeOrDelLike } from "./utilis.js";
 import { addNewComment } from "./utilis.js";
